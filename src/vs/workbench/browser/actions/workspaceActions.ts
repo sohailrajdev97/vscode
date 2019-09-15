@@ -20,9 +20,11 @@ import { IWorkbenchEnvironmentService } from 'vs/workbench/services/environment/
 import { ITextFileService, ISaveOptions } from 'vs/workbench/services/textfile/common/textfiles';
 import { toResource } from 'vs/workbench/common/editor';
 import { URI } from 'vs/base/common/uri';
-import { MenuRegistry, MenuId } from 'vs/platform/actions/common/actions';
-import { WorkbenchStateContext } from 'vs/workbench/browser/contextkeys';
+import { MenuRegistry, MenuId, SyncActionDescriptor } from 'vs/platform/actions/common/actions';
+import { WorkbenchStateContext, SupportsWorkspacesContext } from 'vs/workbench/browser/contextkeys';
 import { IInstantiationService } from 'vs/platform/instantiation/common/instantiation';
+import { Registry } from 'vs/platform/registry/common/platform';
+import { IWorkbenchActionRegistry, Extensions } from 'vs/workbench/common/actions';
 
 export class OpenFileAction extends Action {
 
@@ -309,12 +311,28 @@ export class DuplicateWorkspaceInNewWindowAction extends Action {
 	}
 }
 
-// --- Menu Registration
+// --- Actions Registration
 
+const registry = Registry.as<IWorkbenchActionRegistry>(Extensions.WorkbenchActions);
 const workspacesCategory = nls.localize('workspaces', "Workspaces");
+
+registry.registerWorkbenchAction(new SyncActionDescriptor(AddRootFolderAction, AddRootFolderAction.ID, AddRootFolderAction.LABEL), 'Workspaces: Add Folder to Workspace...', workspacesCategory, SupportsWorkspacesContext);
+registry.registerWorkbenchAction(new SyncActionDescriptor(GlobalRemoveRootFolderAction, GlobalRemoveRootFolderAction.ID, GlobalRemoveRootFolderAction.LABEL), 'Workspaces: Remove Folder from Workspace...', workspacesCategory);
+
+// --- Menu Registration
 
 CommandsRegistry.registerCommand(OpenWorkspaceConfigFileAction.ID, serviceAccessor => {
 	serviceAccessor.get(IInstantiationService).createInstance(OpenWorkspaceConfigFileAction, OpenWorkspaceConfigFileAction.ID, OpenWorkspaceConfigFileAction.LABEL).run();
+});
+
+MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {
+	group: '3_workspace',
+	command: {
+		id: ADD_ROOT_FOLDER_COMMAND_ID,
+		title: nls.localize({ key: 'miAddFolderToWorkspace', comment: ['&& denotes a mnemonic'] }, "A&&dd Folder to Workspace...")
+	},
+	order: 1,
+	when: SupportsWorkspacesContext
 });
 
 MenuRegistry.appendMenuItem(MenuId.CommandPalette, {
