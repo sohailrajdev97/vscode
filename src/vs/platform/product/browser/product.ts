@@ -29,9 +29,9 @@ if (isWeb) {
 	// Obtain values from product.json and package.json
 	const rootPath = path.dirname(getPathFromAmdModule(require, ''));
 	const productJsonPath = path.join(rootPath, 'product.json');
-	product = require.__$__nodeRequire(productJsonPath) as IProductConfiguration;
-
 	const packageJsonPath = path.join(rootPath, 'package.json');
+
+	product = assign({}, require.__$__nodeRequire(productJsonPath) as IProductConfiguration);
 	const pkg = require.__$__nodeRequire(packageJsonPath) as { version: string; };
 
 	// Running out of sources

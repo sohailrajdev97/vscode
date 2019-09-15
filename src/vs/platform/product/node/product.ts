@@ -10,7 +10,7 @@ import { assign } from 'vs/base/common/objects';
 
 const rootPath = path.dirname(getPathFromAmdModule(require, ''));
 const productJsonPath = path.join(rootPath, 'product.json');
-const product = require.__$__nodeRequire(productJsonPath) as IProductConfiguration;
+const product = assign({}, require.__$__nodeRequire(productJsonPath) as IProductConfiguration);
 
 const packageJsonPath = path.join(rootPath, 'package.json');
 const pkg = require.__$__nodeRequire(packageJsonPath) as { version: string; };
