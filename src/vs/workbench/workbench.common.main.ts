@@ -15,6 +15,7 @@ import 'vs/workbench/browser/workbench.contribution';
 
 //#region --- workbench actions
 
+import 'vs/workbench/browser/actions/helpActions';
 import 'vs/workbench/browser/actions/layoutActions';
 import 'vs/workbench/browser/actions/windowActions';
 import 'vs/workbench/browser/actions/developerActions';
