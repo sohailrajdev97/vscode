@@ -122,8 +122,8 @@ import 'vs/workbench/contrib/externalTerminal/node/externalTerminalService';
 import 'vs/workbench/contrib/update/electron-browser/update.contribution';
 
 // Surveys
-import 'vs/workbench/contrib/surveys/electron-browser/nps.contribution';
-import 'vs/workbench/contrib/surveys/electron-browser/languageSurveys.contribution';
+import 'vs/workbench/contrib/surveys/electron-browser/nps.contribution'; //
+import 'vs/workbench/contrib/surveys/electron-browser/languageSurveys.contribution'; //
 
 // Performance
 import 'vs/workbench/contrib/performance/electron-browser/performance.contribution';
@@ -133,11 +133,6 @@ import 'vs/workbench/contrib/cli/node/cli.contribution';
 
 // Themes Support
 import 'vs/workbench/contrib/themes/test/electron-browser/themes.test.contribution';
-
-// Welcome
-import 'vs/workbench/contrib/welcome/walkThrough/browser/walkThrough.contribution';
-import 'vs/workbench/contrib/welcome/gettingStarted/electron-browser/gettingStarted.contribution';
-import 'vs/workbench/contrib/welcome/page/browser/welcomePage.contribution';
 
 // Issues
 import 'vs/workbench/contrib/issue/electron-browser/issue.contribution';
