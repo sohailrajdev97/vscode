@@ -30,7 +30,7 @@ import { IWindowService, IWindowsService } from 'vs/platform/windows/common/wind
 	(function registerFileActions(): void {
 		const fileCategory = nls.localize('file', "File");
 
-		registry.registerWorkbenchAction(new SyncActionDescriptor(CloseWorkspaceAction, CloseWorkspaceAction.ID, CloseWorkspaceAction.LABEL, { primary: KeyChord(KeyMod.CtrlCmd | KeyCode.KEY_K, KeyCode.KEY_F) }), 'File: Close Workspace', fileCategory);
+		registry.registerWorkbenchAction(new SyncActionDescriptor(CloseWorkspaceAction, CloseWorkspaceAction.ID, CloseWorkspaceAction.LABEL, { primary: KeyChord(KeyMod.CtrlCmd | KeyCode.KEY_K, KeyCode.KEY_F) }), 'File: Close Workspace', fileCategory, SupportsWorkspacesContext);
 	})();
 
 	// Actions: View
@@ -78,7 +78,7 @@ import { IWindowService, IWindowsService } from 'vs/platform/windows/common/wind
 		const workspacesCategory = nls.localize('workspaces', "Workspaces");
 
 		registry.registerWorkbenchAction(new SyncActionDescriptor(SaveWorkspaceAsAction, SaveWorkspaceAsAction.ID, SaveWorkspaceAsAction.LABEL), 'Workspaces: Save Workspace As...', workspacesCategory, SupportsWorkspacesContext);
-		registry.registerWorkbenchAction(new SyncActionDescriptor(DuplicateWorkspaceInNewWindowAction, DuplicateWorkspaceInNewWindowAction.ID, DuplicateWorkspaceInNewWindowAction.LABEL), 'Workspaces: Duplicate Workspace in New Window', workspacesCategory);
+		registry.registerWorkbenchAction(new SyncActionDescriptor(DuplicateWorkspaceInNewWindowAction, DuplicateWorkspaceInNewWindowAction.ID, DuplicateWorkspaceInNewWindowAction.LABEL), 'Workspaces: Duplicate Workspace in New Window', workspacesCategory, SupportsWorkspacesContext);
 	})();
 
 	// Actions: macOS Native Tabs
@@ -158,7 +158,7 @@ import { IWindowService, IWindowsService } from 'vs/platform/windows/common/wind
 			title: nls.localize({ key: 'miCloseWorkspace', comment: ['&& denotes a mnemonic'] }, "Close &&Workspace")
 		},
 		order: 3,
-		when: WorkbenchStateContext.isEqualTo('workspace')
+		when: ContextKeyExpr.and(WorkbenchStateContext.isEqualTo('workspace'), SupportsWorkspacesContext)
 	});
 
 	MenuRegistry.appendMenuItem(MenuId.MenubarFileMenu, {

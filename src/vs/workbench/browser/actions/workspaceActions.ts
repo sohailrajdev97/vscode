@@ -131,6 +131,49 @@ export namespace OpenLocalFileFolderCommand {
 	}
 }
 
+export class OpenWorkspaceAction extends Action {
+
+	static readonly ID = 'workbench.action.openWorkspace';
+	static LABEL = nls.localize('openWorkspaceAction', "Open Workspace...");
+
+	constructor(
+		id: string,
+		label: string,
+		@IFileDialogService private readonly dialogService: IFileDialogService
+	) {
+		super(id, label);
+	}
+
+	run(event?: any, data?: ITelemetryData): Promise<any> {
+		return this.dialogService.pickWorkspaceAndOpen({ telemetryExtraData: data });
+	}
+}
+
+export class OpenWorkspaceConfigFileAction extends Action {
+
+	static readonly ID = 'workbench.action.openWorkspaceConfigFile';
+	static readonly LABEL = nls.localize('openWorkspaceConfigFile', "Open Workspace Configuration File");
+
+	constructor(
+		id: string,
+		label: string,
+		@IWorkspaceContextService private readonly workspaceContextService: IWorkspaceContextService,
+		@IEditorService private readonly editorService: IEditorService
+	) {
+		super(id, label);
+
+		this.enabled = !!this.workspaceContextService.getWorkspace().configuration;
+	}
+
+	run(): Promise<any> {
+		const configuration = this.workspaceContextService.getWorkspace().configuration;
+		if (configuration) {
+			return this.editorService.openEditor({ resource: configuration });
+		}
+		return Promise.resolve();
+	}
+}
+
 export class AddRootFolderAction extends Action {
 
 	static readonly ID = 'workbench.action.addRootFolder';
@@ -179,56 +222,13 @@ export class GlobalRemoveRootFolderAction extends Action {
 	}
 }
 
-export class OpenWorkspaceAction extends Action {
-
-	static readonly ID = 'workbench.action.openWorkspace';
-	static LABEL = nls.localize('openWorkspaceAction', "Open Workspace...");
-
-	constructor(
-		id: string,
-		label: string,
-		@IFileDialogService private readonly dialogService: IFileDialogService
-	) {
-		super(id, label);
-	}
-
-	run(event?: any, data?: ITelemetryData): Promise<any> {
-		return this.dialogService.pickWorkspaceAndOpen({ telemetryExtraData: data });
-	}
-}
-
-export class OpenWorkspaceConfigFileAction extends Action {
-
-	static readonly ID = 'workbench.action.openWorkspaceConfigFile';
-	static readonly LABEL = nls.localize('openWorkspaceConfigFile', "Open Workspace Configuration File");
-
-	constructor(
-		id: string,
-		label: string,
-		@IWorkspaceContextService private readonly workspaceContextService: IWorkspaceContextService,
-		@IEditorService private readonly editorService: IEditorService
-	) {
-		super(id, label);
-
-		this.enabled = !!this.workspaceContextService.getWorkspace().configuration;
-	}
-
-	run(): Promise<any> {
-		const configuration = this.workspaceContextService.getWorkspace().configuration;
-		if (configuration) {
-			return this.editorService.openEditor({ resource: configuration });
-		}
-		return Promise.resolve();
-	}
-}
-
 // --- Actions Registration
 
 const registry = Registry.as<IWorkbenchActionRegistry>(Extensions.WorkbenchActions);
 const workspacesCategory = nls.localize('workspaces', "Workspaces");
 
 registry.registerWorkbenchAction(new SyncActionDescriptor(AddRootFolderAction, AddRootFolderAction.ID, AddRootFolderAction.LABEL), 'Workspaces: Add Folder to Workspace...', workspacesCategory, SupportsWorkspacesContext);
-registry.registerWorkbenchAction(new SyncActionDescriptor(GlobalRemoveRootFolderAction, GlobalRemoveRootFolderAction.ID, GlobalRemoveRootFolderAction.LABEL), 'Workspaces: Remove Folder from Workspace...', workspacesCategory);
+registry.registerWorkbenchAction(new SyncActionDescriptor(GlobalRemoveRootFolderAction, GlobalRemoveRootFolderAction.ID, GlobalRemoveRootFolderAction.LABEL), 'Workspaces: Remove Folder from Workspace...', workspacesCategory, SupportsWorkspacesContext);
 
 // --- Menu Registration
 
