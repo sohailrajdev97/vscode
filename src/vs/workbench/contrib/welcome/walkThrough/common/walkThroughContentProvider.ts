@@ -72,9 +72,7 @@ export class WalkThroughSnippetContentProvider implements ITextModelContentProvi
 	}
 
 	public async  provideTextContent(resource: URI): Promise<ITextModel> {
-		const content = await requireToContent(resource);
-
-		const factory = createTextBufferFactory(content);
+		const factory = createTextBufferFactory(await requireToContent(resource));
 
 		let codeEditorModel = this.modelService.getModel(resource);
 		if (!codeEditorModel) {
